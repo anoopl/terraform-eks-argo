@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app
+  namespace: argocd
+spec:
+  project: default  
+  destination:
+    namespace: test-app
+    name: in-cluster
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true 
+      allowEmpty: false 
+    syncOptions:     
+    - Validate=false
+    - CreateNamespace=true 
+    - PrunePropagationPolicy=foreground 
+    - PruneLast=true
+  source:
+    repoURL: 'https://github.com/anoopl/zivver-test'
+    path: app-test
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values-test.yaml    
